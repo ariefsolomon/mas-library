@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 import repository.UserRepository;
 
 import util.CsvUtils;
+import util.EmailValidator;
 import util.InputHelper;
 import util.SystemConstants;
 
@@ -95,7 +96,7 @@ public class MainSystem {
         while(true) {
             System.out.print("Masukkan email Anda: ");
             email = InputHelper.getInputString(true);
-            if (!emailValidator(email)) {
+            if (!EmailValidator.emailValidator(email)) {
                 System.out.println(SystemConstants.MESSAGE_EMAIL_INVALID);
             } else if (CsvUtils.isItemInCsv(SystemConstants.PATH_CSV_USER, email, 2)) {
                 System.out.println(SystemConstants.MESSAGE_EMAIL_LOGGED);
@@ -119,7 +120,7 @@ public class MainSystem {
                 continue;
             }
             Role role = (inputRole == 1) ? Role.LIBRARIAN : Role.READER;
-            user = (inputRole == 1) ? new Librarian(username, email, password) : new Reader(username, email, password);
+            user = (inputRole == 1) ? new Librarian(username, email, password, false) : new Reader(username, email, password, false);
             user.setRole(role);
             break;
         }
@@ -132,16 +133,6 @@ public class MainSystem {
         CsvUtils.writeCSV(SystemConstants.PATH_CSV_USER, data);
         userRepository.addUser(user);
         System.out.println(SystemConstants.PREFIX_SUCCEED + "Registrasi berhasil!");
-    }
-    
-    // ==================================================== OTHER
-    private boolean emailValidator(String email) {
-        String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
-        Pattern pattern = Pattern.compile(emailRegex);
-        if (email == null) {
-            return false;
-        }
-        return pattern.matcher(email).matches();
     }
 
     // ==================================================== HEADER

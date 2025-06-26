@@ -10,11 +10,11 @@ public class User {
     private String password;
     private Role role;
 
-    public User(String username, String email, String password) {
+    public User(String username, String email, String password, boolean isHashed) {
         this.id = UUID.randomUUID();
         this.username = username;
         this.email = email;
-        this.password = hashedPassword(password);
+        this.password = isHashed ? password : hashedPassword(password);
     }
 
     // ==================================================== Getter
@@ -47,9 +47,7 @@ public class User {
         this.username = newUsername;
     }
 
-    public void setPassword(String newPassword) {
-        this.password = hashedPassword(newPassword);
-    }
+    public void setPassword(String newPassword) { this.password = hashedPassword(newPassword); }
 
     // ==================================================== Other
     public boolean checkPassword(String inputPassword) {

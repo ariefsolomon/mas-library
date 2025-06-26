@@ -6,8 +6,8 @@ import java.util.List;
 public class Reader extends User {
     private List<Book> borrowedBooks;
 
-    public Reader(String username, String email, String password) {
-        super(username, email, password);
+    public Reader(String username, String email, String password, boolean isHashed) {
+        super(username, email, password, isHashed);
         this.borrowedBooks = new ArrayList<>();
     }
 

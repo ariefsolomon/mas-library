@@ -27,7 +27,7 @@ public class UserRepository {
                 header = false;
                 continue;
             }
-            User user = new User(row[1], row[2], row[3]);
+            User user = new User(row[1], row[2], row[3], true);
             user.setId(UUID.fromString(row[0]));
             user.setRole(Role.valueOf(row[4]));
             users.add(user);
