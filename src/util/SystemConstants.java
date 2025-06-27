@@ -14,4 +14,6 @@ public class SystemConstants {
     public static final String PREFIX_FAILED = "[FAILED] ";
     public static final String PREFIX_INVALID_INPUT = "[INVALID INPUT] ";
     public static final String PREFIX_ERROR = "[ERROR] ";
+
+    public static final int WIDTH = 40;
 }

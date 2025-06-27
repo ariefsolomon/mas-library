@@ -13,16 +13,15 @@ public class ReaderSystem {
     }
 
     public void start() {
-        SystemHeader.showHeader("Reader");
+        SystemHeader.showHeader("Reader", SystemConstants.WIDTH, 0);
         librarianLoop:
         while (true) {
-            SystemHeader.showSubHeader("Reader Menu");
-            System.out.println("Pilih menu: " +
-                    "\n1. Lihat daftar buku tersedia" +
-                    "\n2. Pinjam buku" +
-                    "\n3. Kembalikan buku" +
-                    "\n4. keluar");
-            System.out.print("Pilihan: ");
+            SystemHeader.showSubHeader("Reader Menu", SystemConstants.WIDTH);
+            System.out.println("1. See books" +
+                    "\n2. Borrow book" +
+                    "\n3. Return book" +
+                    "\n4. Back");
+            System.out.print("Select: ");
             int chosen = InputHelper.getInputInterval(1, 4);
             if (chosen == -1) {
                 System.out.println("\n" + SystemConstants.PREFIX_INVALID_INPUT + "Pilih dengan angka 1 sampai 4!");

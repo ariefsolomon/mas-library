@@ -18,13 +18,12 @@ public class MainSystem {
     private User currentUser;
 
     public void start() {
-        greetingsHeader();
-        SystemHeader.showHeader("Main");
+        SystemHeader.showHeader("WELCOME TO MASLIBRARY", SystemConstants.WIDTH, 1);
+        SystemHeader.showHeader("Main", SystemConstants.WIDTH, 0);
         mainLoop:
         while(true) {
-            SystemHeader.showSubHeader("Main Menu");
-            System.out.println("Menu: " +
-                    "\n1. Login" +
+            SystemHeader.showSubHeader("Main Menu", SystemConstants.WIDTH);
+            System.out.println("1. Login" +
                     "\n2. Register" +
                     "\n3. Exit");
             System.out.print("Select: ");
@@ -42,7 +41,7 @@ public class MainSystem {
                     continue;
                 case 3:
                     userRepository.saveUsersToCsv(SystemConstants.PATH_CSV_USER, SystemConstants.CSV_USER_HEADER);
-                    SystemHeader.showHeader("Thank you!");
+                    SystemHeader.showHeader("Thank you!", SystemConstants.WIDTH, 1);
                     break mainLoop;
             }
         }
@@ -50,7 +49,7 @@ public class MainSystem {
 
     // ==================================================== HANDLER
     private void handleLogin() {
-        SystemHeader.showSubHeader("Login");
+        SystemHeader.showSubHeader("Login", SystemConstants.WIDTH);
         // ------------------------------------------------ Username input
         System.out.print("Username: ");
         String username = InputHelper.getInputString(true);
@@ -79,7 +78,7 @@ public class MainSystem {
     }
 
     private void handleRegister() {
-        SystemHeader.showSubHeader("Registration");
+        SystemHeader.showSubHeader("Registration", SystemConstants.WIDTH);
         // ------------------------------------------------ Username input
         String username;
         while (true) {
@@ -133,14 +132,5 @@ public class MainSystem {
         userRepository.addUser(user);
         CsvUtils.writeCSV(SystemConstants.PATH_CSV_USER, data);
         System.out.println(SystemConstants.PREFIX_SUCCEED + "Registration success!");
-    }
-
-    // ==================================================== HEADER
-    private void greetingsHeader() {
-        System.out.println("\n========================================");
-        System.out.println("|                                      |");
-        System.out.println("|        WELCOME TO MASLIBRARY         |");
-        System.out.println("|                                      |");
-        System.out.println("========================================");
     }
 }

@@ -1,40 +1,31 @@
 package util;
 
 public class SystemHeader {
-    public static void showHeader(String message) {
-        int totalWidth = 40;
-        int padding = (totalWidth - 2 - message.length()) / 2; // -2 untuk karakter '|'
+    public static void showHeader(String message, int width, int verticalPadding) {
+        System.out.println("\n" + "=".repeat(width));
 
-        StringBuilder line = new StringBuilder();
-        line.append("|");
-
-        // Add space to the left
-        for (int i = 0; i < padding; i++) {
-            line.append(" ");
+        for (int i = 0; i < verticalPadding; i++) {
+            System.out.println("|" + " ".repeat(width - 2) + "|");
         }
 
-        line.append(message);
+        int space = width - 2;
+        int paddingLeft = (space - message.length()) / 2;
+        int paddingRight = space - message.length() - paddingLeft;
+        String centeredLine = "|" + " ".repeat(paddingLeft) + message + " ".repeat(paddingRight) + "|";
+        System.out.println(centeredLine);
 
-        // Add space to the right
-        int remainingSpace = totalWidth - 2 - padding - message.length();
-        for (int i = 0; i < remainingSpace; i++) {
-            line.append(" ");
+        for (int i = 0; i < verticalPadding; i++) {
+            System.out.println("|" + " ".repeat(width - 2) + "|");
         }
 
-        line.append("|");
-
-        // Print header
-        System.out.println("\n" + "=".repeat(totalWidth));
-        System.out.println(line.toString());
-        System.out.println("=".repeat(totalWidth));
+        System.out.println("=".repeat(width));
     }
 
-    public static void showSubHeader(String message) {
-        int totalWidth = 40;
-        int padding = (totalWidth - message.length()) / 2;
+    public static void showSubHeader(String message, int width) {
+        int padding = (width - message.length()) / 2;
 
         String left = "-".repeat(padding);
-        String right = "-".repeat(totalWidth - message.length() - padding);
+        String right = "-".repeat(width - message.length() - padding);
 
         System.out.println("\n" + left + message + right);
     }

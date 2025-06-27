@@ -17,17 +17,16 @@ public class LibrarianSystem {
     }
 
     public void start() {
-        SystemHeader.showHeader("Librarian");
+        SystemHeader.showHeader("Librarian", SystemConstants.WIDTH, 0);
         librarianLoop:
         while (true) {
-            SystemHeader.showSubHeader("Librarian Menu");
-            System.out.println("Pilih menu: " +
-                    "\n1. Lihat buku di library saya" +
-                    "\n2. Lihat daftar peminjam buku" +
-                    "\n3. Tambah buku" +
-                    "\n4. Hapus buku" +
-                    "\n5. Keluar");
-            System.out.print("Pilihan: ");
+            SystemHeader.showSubHeader("Librarian Menu", SystemConstants.WIDTH);
+            System.out.println("1. Show my books" +
+                    "\n2. Show borrowers" +
+                    "\n3. Add book" +
+                    "\n4. Delete book" +
+                    "\n5. Back");
+            System.out.print("Select: ");
             int chosen = InputHelper.getInputInterval(1, 5);
             if (chosen == -1) {
                 System.out.println("\n" + SystemConstants.PREFIX_INVALID_INPUT + "Pilih dengan angka 1 sampai 4!");
@@ -54,7 +53,7 @@ public class LibrarianSystem {
 
     private void showBooks() {
         List<Book> library = currentUser.getLibrary();
-        System.out.println("\n----------------------------------------");
+        System.out.println("\n" + "-".repeat(SystemConstants.WIDTH));
         if (library.isEmpty()) {
             System.out.println("Belum ada buku!");
             return;
@@ -62,7 +61,7 @@ public class LibrarianSystem {
         for (Book book : library) {
             System.out.println(book.getTitle() + " by " + book.getAuthor());
         }
-        System.out.println("----------------------------------------");
+        System.out.println("-".repeat(SystemConstants.WIDTH));
     }
 
     private void showBorrowers() {
