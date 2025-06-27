@@ -14,9 +14,4 @@ public class SystemConstants {
     public static final String PREFIX_FAILED = "[FAILED] ";
     public static final String PREFIX_INVALID_INPUT = "[INVALID INPUT] ";
     public static final String PREFIX_ERROR = "[ERROR] ";
-
-    public static final String MESSAGE_USERNAME_TAKEN = "Username sudah digunakan!";
-    public static final String MESSAGE_EMAIL_INVALID = "Email tidak valid!";
-    public static final String MESSAGE_EMAIL_LOGGED = "Email sudah terdaftar!";
-    public static final String MESSAGE_IS_CONTINUE = "Ingin melanjutkan? (y/N): ";
 }

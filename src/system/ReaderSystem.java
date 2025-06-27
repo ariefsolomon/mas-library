@@ -3,6 +3,7 @@ package system;
 import model.User;
 import util.InputHelper;
 import util.SystemConstants;
+import util.SystemHeader;
 
 public class ReaderSystem {
     private User currentUser;
@@ -12,10 +13,10 @@ public class ReaderSystem {
     }
 
     public void start() {
-        header();
+        SystemHeader.showHeader("Reader");
         librarianLoop:
         while (true) {
-            menuHeader();
+            SystemHeader.showSubHeader("Reader Menu");
             System.out.println("Pilih menu: " +
                     "\n1. Lihat daftar buku tersedia" +
                     "\n2. Pinjam buku" +
@@ -28,19 +29,12 @@ public class ReaderSystem {
                 continue;
             }
             switch (chosen) {
+                case 1:
+                case 2:
+                case 3:
                 case 4:
                     break librarianLoop;
             }
         }
-    }
-
-    private void header() {
-        System.out.println("\n========================================");
-        System.out.println("|             Menu Reader              |");
-        System.out.println("========================================");
-    }
-
-    private void menuHeader() {
-        System.out.println("\n-------------- Reader Menu -------------");
     }
 }

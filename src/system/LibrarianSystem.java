@@ -5,8 +5,8 @@ import model.Librarian;
 import model.User;
 import util.InputHelper;
 import util.SystemConstants;
+import util.SystemHeader;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class LibrarianSystem {
@@ -17,10 +17,10 @@ public class LibrarianSystem {
     }
 
     public void start() {
-        header();
+        SystemHeader.showHeader("Librarian");
         librarianLoop:
         while (true) {
-            menuHeader();
+            SystemHeader.showSubHeader("Librarian Menu");
             System.out.println("Pilih menu: " +
                     "\n1. Lihat buku di library saya" +
                     "\n2. Lihat daftar peminjam buku" +
@@ -75,15 +75,5 @@ public class LibrarianSystem {
 
     private void deleteBook() {
 
-    }
-
-    private void header() {
-        System.out.println("\n========================================");
-        System.out.println("|            Menu Librarian            |");
-        System.out.println("========================================");
-    }
-
-    private void menuHeader() {
-        System.out.println("\n------------- Librarian Menu -----------");
     }
 }

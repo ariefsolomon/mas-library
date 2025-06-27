@@ -11,10 +11,7 @@ import java.util.regex.Pattern;
 
 import repository.UserRepository;
 
-import util.CsvUtils;
-import util.EmailValidator;
-import util.InputHelper;
-import util.SystemConstants;
+import util.*;
 
 public class MainSystem {
     private UserRepository userRepository = new UserRepository();
@@ -22,18 +19,18 @@ public class MainSystem {
 
     public void start() {
         greetingsHeader();
-        header();
+        SystemHeader.showHeader("Main");
         mainLoop:
         while(true) {
-            mainMenuHeader();
-            System.out.println("Pilih menu: " +
+            SystemHeader.showSubHeader("Main Menu");
+            System.out.println("Menu: " +
                     "\n1. Login" +
                     "\n2. Register" +
                     "\n3. Exit");
-            System.out.print("Pilihan: ");
+            System.out.print("Select: ");
             int chosen = InputHelper.getInputInterval(1, 3);
             if (chosen == -1) {
-                System.out.println("\n" + SystemConstants.PREFIX_INVALID_INPUT + "Pilih dengan angka 1 sampai 3!");
+                System.out.println("\n" + SystemConstants.PREFIX_INVALID_INPUT + "Enter a number in 1-3!");
                 continue;
             }
             switch (chosen) {
@@ -45,7 +42,7 @@ public class MainSystem {
                     continue;
                 case 3:
                     userRepository.saveUsersToCsv(SystemConstants.PATH_CSV_USER, SystemConstants.CSV_USER_HEADER);
-                    exitHeader();
+                    SystemHeader.showHeader("Thank you!");
                     break mainLoop;
             }
         }
@@ -53,18 +50,18 @@ public class MainSystem {
 
     // ==================================================== HANDLER
     private void handleLogin() {
-        loginHeader();
+        SystemHeader.showSubHeader("Login");
         // ------------------------------------------------ Username input
-        System.out.print("Masukkan username Anda: ");
+        System.out.print("Username: ");
         String username = InputHelper.getInputString(true);
         if (CsvUtils.isItemInCsv(SystemConstants.PATH_CSV_USER, username, 1)) {
-            System.out.println(SystemConstants.PREFIX_SUCCEED + "Username ditemukan!");
+            System.out.println(SystemConstants.PREFIX_SUCCEED + "Username found!");
             // -------------------------------------------- Password input
-            System.out.print("Masukkan password Anda: ");
+            System.out.print("Password: ");
             String password = InputHelper.getInputString(false);
             String passwordActual = CsvUtils.getItemByKeyCsv(SystemConstants.PATH_CSV_USER, username, 1, 3);
             if (BCrypt.checkpw(password, passwordActual)) {
-                System.out.println(SystemConstants.PREFIX_SUCCEED + "Login berhasil!");
+                System.out.println(SystemConstants.PREFIX_SUCCEED + "Login success!");
                 currentUser = userRepository.getUserByUsername(username);
                 if (CsvUtils.getItemByKeyCsv(SystemConstants.PATH_CSV_USER, username, 1, 4).equals(Role.LIBRARIAN.name())) {
                     LibrarianSystem librarianService = new LibrarianSystem(currentUser);
@@ -74,52 +71,52 @@ public class MainSystem {
                     readerService.start();
                 }
             } else {
-                System.out.println(SystemConstants.PREFIX_FAILED + "Password salah!");
+                System.out.println(SystemConstants.PREFIX_FAILED + "Wrong password!");
             }
         } else {
-            System.out.println(SystemConstants.PREFIX_FAILED + "Username tidak ditemukan!");
+            System.out.println(SystemConstants.PREFIX_FAILED + "Username not found!");
         }
     }
 
     private void handleRegister() {
-        registerHeader();
+        SystemHeader.showSubHeader("Registration");
         // ------------------------------------------------ Username input
         String username;
         while (true) {
-            System.out.print("Masukkan username Anda: ");
+            System.out.print("Username: ");
             username = InputHelper.getInputString(true);
             if (!CsvUtils.isItemInCsv(SystemConstants.PATH_CSV_USER, username, 1)) {
                 break;
             } else {
-                System.out.println(SystemConstants.PREFIX_FAILED + SystemConstants.MESSAGE_USERNAME_TAKEN);
+                System.out.println(SystemConstants.PREFIX_FAILED + "The username is taken!");
             }
         }
         // ------------------------------------------------ Email input
         String email;
         while(true) {
-            System.out.print("Masukkan email Anda: ");
+            System.out.print("Email: ");
             email = InputHelper.getInputString(true);
             if (!EmailValidator.emailValidator(email)) {
-                System.out.println(SystemConstants.MESSAGE_EMAIL_INVALID);
+                System.out.println(SystemConstants.PREFIX_INVALID_INPUT + "Invalid email!");
             } else if (CsvUtils.isItemInCsv(SystemConstants.PATH_CSV_USER, email, 2)) {
-                System.out.println(SystemConstants.MESSAGE_EMAIL_LOGGED);
+                System.out.println(SystemConstants.PREFIX_FAILED + "The email is logged!");
             } else {
                 break;
             }
         }
         // ------------------------------------------------ Password input
-        System.out.print("Masukkan password Anda: ");
+        System.out.print("Password: ");
         String password = InputHelper.getInputString(false);
         // ------------------------------------------------ Finalization
         User user;
         while (true) {
-            System.out.println("Daftar sebagai: " +
+            System.out.println("Register as: " +
                     "\n1. Librarian" +
                     "\n2. Reader");
-            System.out.print("Pilihan: ");
+            System.out.print("Select: ");
             int inputRole = InputHelper.getInputInterval(1, 2);
             if (inputRole == -1) {
-                System.out.println(SystemConstants.PREFIX_INVALID_INPUT + "Pilih dengan angka 1 atau 2!");
+                System.out.println(SystemConstants.PREFIX_INVALID_INPUT + "Enter a number 1 or 2!");
                 continue;
             }
             Role role = (inputRole == 1) ? Role.LIBRARIAN : Role.READER;
@@ -135,37 +132,15 @@ public class MainSystem {
                 user.getRole().name() };
         userRepository.addUser(user);
         CsvUtils.writeCSV(SystemConstants.PATH_CSV_USER, data);
-        System.out.println(SystemConstants.PREFIX_SUCCEED + "Registrasi berhasil!");
+        System.out.println(SystemConstants.PREFIX_SUCCEED + "Registration success!");
     }
 
     // ==================================================== HEADER
     private void greetingsHeader() {
         System.out.println("\n========================================");
         System.out.println("|                                      |");
-        System.out.println("|     SELAMAT DATANG DI MASLIBRARY     |");
+        System.out.println("|        WELCOME TO MASLIBRARY         |");
         System.out.println("|                                      |");
         System.out.println("========================================");
     }
-
-    private void header() {
-        System.out.println("\n========================================");
-        System.out.println("|              Menu Utama              |");
-        System.out.println("========================================");
-    }
-
-    private void exitHeader() {
-        System.out.println("\n========================================");
-        System.out.println("|             Terima Kasih             |");
-        System.out.println("========================================");
-    }
-
-    private void mainMenuHeader() {
-        System.out.println("\n--------------- Main Menu --------------");
-    }
-
-    private void loginHeader() {
-        System.out.println("\n----------------- Login ----------------");
-    }
-
-    private void registerHeader() { System.out.println("\n-------------- Registrasi --------------"); }
 }
