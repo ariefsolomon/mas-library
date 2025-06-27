@@ -1,6 +1,8 @@
 package repository;
 
 import com.opencsv.CSVWriter;
+import model.Librarian;
+import model.Reader;
 import model.Role;
 import model.User;
 import util.CsvUtils;
@@ -27,9 +29,15 @@ public class UserRepository {
                 header = false;
                 continue;
             }
-            User user = new User(row[1], row[2], row[3], true);
+            Role role = Role.valueOf(row[4]);
+            User user;
+            if (role == Role.LIBRARIAN) {
+                user = new Librarian(row[1], row[2], row[3], true);
+            } else {
+                user = new Reader(row[1], row[2], row[3], true);
+            }
             user.setId(UUID.fromString(row[0]));
-            user.setRole(Role.valueOf(row[4]));
+            user.setRole(role);
             users.add(user);
         }
         return users;
@@ -45,6 +53,15 @@ public class UserRepository {
         } catch (IOException e) {
             System.err.println(SystemConstants.PREFIX_FAILED + e.getMessage());
         }
+    }
+
+    public User getUserByUsername(String username) {
+        for (User user : userRepository) {
+            if (username.equals(user.getUsername())) {
+                return user;
+            }
+        }
+        return null;
     }
 
     public void addUser(User user) {

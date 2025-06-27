@@ -1,3 +1,4 @@
 "id","username","email","password","role"
 "dc4f4817-1da4-4302-919a-a9735195f993","arief","adaosih@gamil.com","$2a$10$I4a7ieyWty6UNXCN3KClkuCBa9mI7gbfA7ErnAqcZMJfhFRj.DMa.","LIBRARIAN"
 "f6ee3fad-0dc6-41bc-b7ef-b9b11590033d","solomon","asdoiahs@gamil.com","$2a$10$kYUkmo5kJCM2PWfiShnpE.B5yhv1XpvmCXqH2nQGwo7gwDKthuSBO","READER"
+"236c5446-4d74-4631-85a1-35248aab6003","ariefsolomon","ariefsolomon8@gmail.com","$2a$10$OfsL7GkSpRWFQj3opPi.r.C.9GsZk1WZuOFIfMr4/5yGoKh1J7gXu","LIBRARIAN"

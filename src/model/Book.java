@@ -21,6 +21,14 @@ public class Book {
         this.description = builder.description;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
     public static class BookBuilder {
         private final String title;
         private final String author;

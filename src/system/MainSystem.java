@@ -17,10 +17,12 @@ import util.InputHelper;
 import util.SystemConstants;
 
 public class MainSystem {
-    UserRepository userRepository = new UserRepository();
+    private UserRepository userRepository = new UserRepository();
+    private User currentUser;
 
     public void start() {
         greetingsHeader();
+        header();
         mainLoop:
         while(true) {
             mainMenuHeader();
@@ -63,11 +65,12 @@ public class MainSystem {
             String passwordActual = CsvUtils.getItemByKeyCsv(SystemConstants.PATH_CSV_USER, username, 1, 3);
             if (BCrypt.checkpw(password, passwordActual)) {
                 System.out.println(SystemConstants.PREFIX_SUCCEED + "Login berhasil!");
+                currentUser = userRepository.getUserByUsername(username);
                 if (CsvUtils.getItemByKeyCsv(SystemConstants.PATH_CSV_USER, username, 1, 4).equals(Role.LIBRARIAN.name())) {
-                    LibrarianSystem librarianService = new LibrarianSystem();
+                    LibrarianSystem librarianService = new LibrarianSystem(currentUser);
                     librarianService.start();
                 } else {
-                    ReaderSystem readerService = new ReaderSystem();
+                    ReaderSystem readerService = new ReaderSystem(currentUser);
                     readerService.start();
                 }
             } else {
@@ -130,15 +133,23 @@ public class MainSystem {
                 user.getEmail(),
                 user.getPassword(),
                 user.getRole().name() };
-        CsvUtils.writeCSV(SystemConstants.PATH_CSV_USER, data);
         userRepository.addUser(user);
+        CsvUtils.writeCSV(SystemConstants.PATH_CSV_USER, data);
         System.out.println(SystemConstants.PREFIX_SUCCEED + "Registrasi berhasil!");
     }
 
     // ==================================================== HEADER
     private void greetingsHeader() {
         System.out.println("\n========================================");
-        System.out.println("|     Selamat Datang di MasLibrary     |");
+        System.out.println("|                                      |");
+        System.out.println("|     SELAMAT DATANG DI MASLIBRARY     |");
+        System.out.println("|                                      |");
+        System.out.println("========================================");
+    }
+
+    private void header() {
+        System.out.println("\n========================================");
+        System.out.println("|              Menu Utama              |");
         System.out.println("========================================");
     }
 

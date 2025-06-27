@@ -1,9 +1,16 @@
 package system;
 
+import model.User;
 import util.InputHelper;
 import util.SystemConstants;
 
 public class ReaderSystem {
+    private User currentUser;
+
+    public ReaderSystem(User currentUser) {
+        this.currentUser = currentUser;
+    }
+
     public void start() {
         header();
         librarianLoop:
@@ -21,7 +28,8 @@ public class ReaderSystem {
                 continue;
             }
             switch (chosen) {
-
+                case 4:
+                    break librarianLoop;
             }
         }
     }
