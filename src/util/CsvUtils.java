@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CsvUtils {
-    public static void writeCSV(String filePath, String[] data) {
-        try (CSVWriter writer = new CSVWriter(new FileWriter(filePath, true))) {
+    public static void writeCSV(String filePath, String[] data, boolean append) {
+        try (CSVWriter writer = new CSVWriter(new FileWriter(filePath, append))) {
             writer.writeNext(data);
         } catch (IOException e) {
             System.err.println("Error writing to CSV file: " + e.getMessage());

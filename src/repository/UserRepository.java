@@ -16,9 +16,14 @@ import java.util.UUID;
 
 public class UserRepository {
     private List<User> userRepository;
+    private BookRepository bookRepository;
 
-    public UserRepository() {
-        userRepository = loadUsersFromCsv(true);
+    public UserRepository(BookRepository bookRepository) {
+        if (!new java.io.File(SystemConstants.PATH_CSV_USER).exists()) {
+            CsvUtils.writeCSV(SystemConstants.PATH_CSV_USER, SystemConstants.CSV_USER_HEADER, false);
+        }
+        this.userRepository = loadUsersFromCsv(true);
+        this.bookRepository = bookRepository;
     }
 
     private List<User> loadUsersFromCsv(boolean header) {
@@ -32,9 +37,9 @@ public class UserRepository {
             Role role = Role.valueOf(row[4]);
             User user;
             if (role == Role.LIBRARIAN) {
-                user = new Librarian(row[1], row[2], row[3], true);
+                user = new Librarian(row[1], row[2], row[3], true, bookRepository);
             } else {
-                user = new Reader(row[1], row[2], row[3], true);
+                user = new Reader(row[1], row[2], row[3], true, bookRepository);
             }
             user.setId(UUID.fromString(row[0]));
             user.setRole(role);

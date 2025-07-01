@@ -3,6 +3,7 @@ package system;
 import model.Book;
 import model.Librarian;
 import model.User;
+import repository.BookRepository;
 import util.InputHelper;
 import util.SystemConstants;
 import util.SystemHeader;
@@ -11,9 +12,13 @@ import java.util.List;
 
 public class LibrarianSystem {
     private Librarian currentUser;
+    private BookRepository library;
+    private BookRepository bookRepository;
 
-    public LibrarianSystem(User currentUser) {
+    public LibrarianSystem(User currentUser, BookRepository bookRepository) {
         this.currentUser = (Librarian) currentUser;
+        this.library = ((Librarian) currentUser).getLibrary();
+        this.bookRepository = bookRepository;
     }
 
     public void start() {
@@ -40,25 +45,27 @@ public class LibrarianSystem {
                     showBorrowers();
                     break;
                 case 3:
-                    addBook();
+                    addBookHandler();
                     break;
                 case 4:
                     deleteBook();
                     break;
                 case 5:
+                    currentUser.getLibrary().saveBooksToCsv(currentUser.getLibraryPath(), SystemConstants.CSV_BOOK_HEADER);
+                    bookRepository.saveBooksToCsv(SystemConstants.PATH_CSV_BOOKS, SystemConstants.CSV_BOOK_HEADER);
                     break librarianLoop;
             }
         }
     }
 
     private void showBooks() {
-        List<Book> library = currentUser.getLibrary();
+        BookRepository library = currentUser.getLibrary();
         System.out.println("\n" + "-".repeat(SystemConstants.WIDTH));
         if (library.isEmpty()) {
-            System.out.println("Belum ada buku!");
+            System.out.println("Empty");
             return;
         }
-        for (Book book : library) {
+        for (Book book : library.getBookRepository()) {
             System.out.println(book.getTitle() + " by " + book.getAuthor());
         }
         System.out.println("-".repeat(SystemConstants.WIDTH));
@@ -68,8 +75,14 @@ public class LibrarianSystem {
 
     }
 
-    private void addBook() {
-
+    private void addBookHandler() {
+        System.out.print("Title: ");
+        String title = InputHelper.getInputString(true);
+        System.out.print("Author: ");
+        String author = InputHelper.getInputString(true);
+        Book book = new Book(title, author);
+        library.addBook(book);
+        bookRepository.addBook(book);
     }
 
     private void deleteBook() {

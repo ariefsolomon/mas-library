@@ -9,12 +9,14 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.regex.Pattern;
 
+import repository.BookRepository;
 import repository.UserRepository;
 
 import util.*;
 
 public class MainSystem {
-    private UserRepository userRepository = new UserRepository();
+    private BookRepository bookRepository = new BookRepository(SystemConstants.PATH_CSV_BOOKS);
+    private UserRepository userRepository = new UserRepository(bookRepository);
     private User currentUser;
 
     public void start() {
@@ -63,10 +65,10 @@ public class MainSystem {
                 System.out.println(SystemConstants.PREFIX_SUCCEED + "Login success!");
                 currentUser = userRepository.getUserByUsername(username);
                 if (CsvUtils.getItemByKeyCsv(SystemConstants.PATH_CSV_USER, username, 1, 4).equals(Role.LIBRARIAN.name())) {
-                    LibrarianSystem librarianService = new LibrarianSystem(currentUser);
+                    LibrarianSystem librarianService = new LibrarianSystem(currentUser, bookRepository);
                     librarianService.start();
                 } else {
-                    ReaderSystem readerService = new ReaderSystem(currentUser);
+                    ReaderSystem readerService = new ReaderSystem(currentUser, bookRepository);
                     readerService.start();
                 }
             } else {
@@ -119,7 +121,7 @@ public class MainSystem {
                 continue;
             }
             Role role = (inputRole == 1) ? Role.LIBRARIAN : Role.READER;
-            user = (inputRole == 1) ? new Librarian(username, email, password, false) : new Reader(username, email, password, false);
+            user = (inputRole == 1) ? new Librarian(username, email, password, false, bookRepository) : new Reader(username, email, password, false, bookRepository);
             user.setRole(role);
             break;
         }
@@ -130,7 +132,7 @@ public class MainSystem {
                 user.getPassword(),
                 user.getRole().name() };
         userRepository.addUser(user);
-        CsvUtils.writeCSV(SystemConstants.PATH_CSV_USER, data);
+        CsvUtils.writeCSV(SystemConstants.PATH_CSV_USER, data, true);
         System.out.println(SystemConstants.PREFIX_SUCCEED + "Registration success!");
     }
 }

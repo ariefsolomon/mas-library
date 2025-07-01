@@ -1,15 +1,18 @@
 package system;
 
 import model.User;
+import repository.BookRepository;
 import util.InputHelper;
 import util.SystemConstants;
 import util.SystemHeader;
 
 public class ReaderSystem {
     private User currentUser;
+    private BookRepository bookRepository;
 
-    public ReaderSystem(User currentUser) {
+    public ReaderSystem(User currentUser, BookRepository bookRepository) {
         this.currentUser = currentUser;
+        this.bookRepository = bookRepository;
     }
 
     public void start() {
