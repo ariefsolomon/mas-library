@@ -8,6 +8,7 @@ import model.User;
 import util.CsvUtils;
 import util.SystemConstants;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,8 +20,9 @@ public class UserRepository {
     private BookRepository bookRepository;
 
     public UserRepository(BookRepository bookRepository) {
-        if (!new java.io.File(SystemConstants.PATH_CSV_USER).exists()) {
-            CsvUtils.writeCSV(SystemConstants.PATH_CSV_USER, SystemConstants.CSV_USER_HEADER, false);
+        File csvFile = new File(SystemConstants.PATH_CSV_USER);
+        if (!csvFile.exists()) {
+            CsvUtils.writeCSV(SystemConstants.PATH_CSV_USER, new String[]{}, false);
         }
         this.userRepository = loadUsersFromCsv(true);
         this.bookRepository = bookRepository;
@@ -28,13 +30,16 @@ public class UserRepository {
 
     private List<User> loadUsersFromCsv(boolean header) {
         List<User> users = new ArrayList<>();
+        File csvFile = new File(SystemConstants.PATH_CSV_USER);
+        if (!csvFile.exists()) return users;
         List<String[]> data = CsvUtils.readCSV(SystemConstants.PATH_CSV_USER);
         for (String[] row : data) {
             if (header) {
                 header = false;
                 continue;
             }
-            Role role = Role.valueOf(row[4]);
+            if (row.length != 5) continue;
+            Role role = Role.valueOf(row[4].toUpperCase());
             User user;
             if (role == Role.LIBRARIAN) {
                 user = new Librarian(row[1], row[2], row[3], true, bookRepository);

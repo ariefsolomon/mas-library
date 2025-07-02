@@ -12,12 +12,12 @@ import java.util.List;
 
 public class LibrarianSystem {
     private Librarian currentUser;
-    private BookRepository library;
+    private List<Book> library;
     private BookRepository bookRepository;
 
     public LibrarianSystem(User currentUser, BookRepository bookRepository) {
         this.currentUser = (Librarian) currentUser;
-        this.library = ((Librarian) currentUser).getLibrary();
+        this.library = ((Librarian) currentUser).getLibrary().getBookRepository();
         this.bookRepository = bookRepository;
     }
 
@@ -59,13 +59,13 @@ public class LibrarianSystem {
     }
 
     private void showBooks() {
-        BookRepository library = currentUser.getLibrary();
+        List<Book> library = currentUser.getLibrary().getBookRepository();
         System.out.println("\n" + "-".repeat(SystemConstants.WIDTH));
         if (library.isEmpty()) {
             System.out.println("Empty");
             return;
         }
-        for (Book book : library.getBookRepository()) {
+        for (Book book : library) {
             System.out.println(book.getTitle() + " by " + book.getAuthor());
         }
         System.out.println("-".repeat(SystemConstants.WIDTH));
@@ -81,7 +81,7 @@ public class LibrarianSystem {
         System.out.print("Author: ");
         String author = InputHelper.getInputString(true);
         Book book = new Book(title, author);
-        library.addBook(book);
+        library.add(book);
         bookRepository.addBook(book);
     }
 

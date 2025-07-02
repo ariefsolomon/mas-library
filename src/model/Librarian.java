@@ -2,6 +2,8 @@ package model;
 
 import repository.BookRepository;
 import util.CsvUtils;
+import java.io.File;
+import java.util.List;
 
 public class Librarian extends User {
     private BookRepository library;
@@ -11,9 +13,12 @@ public class Librarian extends User {
     public Librarian(String username, String email, String password, boolean isHashed, BookRepository bookRepository) {
         super(username, email, password, isHashed);
         this.libraryPath = "database" + "/" + "users_books" + "/" + username + "s_books" + ".csv";
-        String[] initialData = {};
-        CsvUtils.writeCSV(libraryPath, initialData, true);
+        File csvFile = new File(libraryPath);
+        if (!csvFile.exists()) {
+            CsvUtils.writeCSV(libraryPath, new String[]{}, false);
+        }
         this.library = new BookRepository(libraryPath);
+        this.bookRepository = bookRepository;
     }
 
     public BookRepository getLibrary() {

@@ -1,5 +1,6 @@
 package repository;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,8 +15,9 @@ public class BookRepository {
     private List<Book> bookRepository;
 
     public BookRepository(String path) {
-        if (!new java.io.File(path).exists()) {
-            CsvUtils.writeCSV(path, SystemConstants.CSV_BOOK_HEADER, false);
+        File csvFile = new File(path);
+        if (!csvFile.exists()) {
+            CsvUtils.writeCSV(path, new String[]{}, false);
         }
         bookRepository = loadBooksFromCsv(path, true);
     }
@@ -46,6 +48,10 @@ public class BookRepository {
 
     public List<Book> loadBooksFromCsv(String path, boolean header) {
         List<Book> result = new ArrayList<>();
+        File csvFile = new File(path);
+        if (!csvFile.exists()) {
+            return result;
+        }
         List<String[]> data = CsvUtils.readCSV(path);
         for (String[] row : data) {
             if (header) {

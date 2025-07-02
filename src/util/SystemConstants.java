@@ -8,7 +8,7 @@ public class SystemConstants {
     public static final String PATH_CSV_LIBRARIAN_BOOKS = "database/users_books.csv";
 
     public static final String[] CSV_USER_HEADER = {"id", "username", "email", "password", "role"};
-    public static final String[] CSV_BOOK_HEADER = {"title", "author", "status_borrowed"};
+    public static final String[] CSV_BOOK_HEADER = {"title", "author"};
 
     public static final String PREFIX_SUCCEED = "[SUCCEED] ";
     public static final String PREFIX_FAILED = "[FAILED] ";
